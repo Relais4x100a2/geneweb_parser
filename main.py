@@ -1,55 +1,36 @@
 import re
+import uuid
 
-class GenewebParser():
+def individu_parse():
+    """
+    https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
+    Parse la chaîne mise en paramètre et retourne un dictionnaire
+    :param adresse_string: chaîne de caractères de l'adresse
+    :return: dict
+    """
+    with open('pierre.txt', 'rt') as myfile:
+        fichier = myfile.read()
 
-    def individu_parse(self, fichier):
-        """
-        https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
-        Parse la chaîne mise en paramètre et retourne un dictionnaire
-        :param adresse_string: chaîne de caractères de l'adresse
-        :return: dict
-        """
+    regex_individu = r"(?s)(?<=^pevt )(.*?)(?=end pevt)"
+    matches = re.findall(regex_individu, fichier, re.MULTILINE)
+    list_individu = []
+
+    for m in matches:
+        line = m.split()
+        id_g = line[0]+" "+line[1]
         dict_individu = {
-            "id_geneweb":
-            "nom": self.get_nom(),
-            "prenoms":
-        }
+        "id_geneweb": id_g,
+        "id": uuid.uuid4().hex
+    }
+        list_individu.append(dict_individu)
 
-        list_individu = []
-
-        return dict_individu
+    print(list_individu)
 
 
+if __name__ == '__main__':
+    individu_parse()
 
 
-
-
-
-
-
-
-with open ('b.txt', 'rt') as myfile:  # Open lorem.txt for reading text
-    test_str = myfile.read()              # Read the entire file to a string
-
-regex_ind = r"^[A-Z]+[A-Za-zé_ ]*\n"
-regex_individu = r"(?s)(?<=^pevt )(.*?)(?=end pevt)"
-regex_ind_evt = r"(?s)(?<=^#)(.*?)(?=^#)"
-regex_famille = r"(?s)(?<=^fam )(.*?)(?=^end$)"
-regex_notes= r"(?s)(?<=^notes )(.*?)(?=^end notes$)"
-
-matches = re.findall(regex_individu, test_str, re.MULTILINE)
-
-list=[]
-sous_list=[]
-list_of_lists = []
-for m in matches:
-    line=m.split()
-    id=(line[0:2])
-    match_evt = re.findall(regex_ind_evt, m, re.MULTILINE)
-    for i in match_evt:
-        sous_list.append(" @@EVENEMENT@@ "+i)
-    list.append([id,sous_list])
-print(list[1])
 
 
 
