@@ -1,22 +1,33 @@
 import re
 import uuid
+import io
+
+# Pour nettoyer le code, regarder https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
 
 
 def individu_parse():
     """
-    https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
     Parse la chaîne mise en paramètre et retourne un dictionnaire
     :param
     :return: dict
     """
-    with open('b.txt', 'rt') as myfile:
+    with open('pierre.txt', 'rt') as myfile:
         fichier = myfile.read()
 
-    regex_individu = r"(?s)(?<=^pevt )(.*?)(?=end pevt)"
-    regex_evt = r"(?s)(?<=^#)(.*?)(?=\n)"
-    matches = re.findall(regex_individu, fichier, re.MULTILINE)
+    # Listes vides destinées à recevoir l'ensemle des informations parsées.
     list_individu = []
     list_evt_ind = []
+    list_evt_ind_note = []
+
+    # ***REGEX***
+    # regex pour les individus
+    regex_individu = r"(?s)(?<=^pevt )(.*?)(?=end pevt)"
+    # regex pour les événements
+    # fin de la regex (?=^#) pour inclure les notes liées à l'événement
+    regex_evt = r"(?s)(?<=^#)(.*?)(?=^#)"
+
+    # On récupère toutes les concordances avec la regex pour les individus
+    matches = re.findall(regex_individu, fichier, re.MULTILINE)
 
     for m in matches:
         # on crée la liste des individus, un individu étant défini dans un dictionnaire
@@ -27,25 +38,47 @@ def individu_parse():
             "id_ind": uuid.uuid4().hex
         }
         list_individu.append(dict_individu)
-        # on crée la liste des événéments de chaque individu, chaque événément étant défini par un dictionnaire
+
+        # On crée la liste des événéments de chaque individu, chaque événément étant défini par un dictionnaire
         match_evt = re.findall(regex_evt, m, re.MULTILINE)
         for evt in match_evt:
             line = evt.split()
             dict_evt = {
                 "id_evt": uuid.uuid4().hex,
                 "type": line[0],
+                "date": line[1],
                 "ind_evt": [{"ind": dict_individu, "role": "objet"}]
-                #"date": line[1]
             }
             list_evt_ind.append(dict_evt)
-            # il faudra modifier ind_evt en ajoutant le statut dans l'événement
-        #, re.MULTILINE
-        #print(m)
-        #for m in matches:
-            #print(m)
+            # on récupère les infos (note/wit) relatives aux événements des individus
+            # pour cela on récupère les lignes de chaque evt.
+            lines = evt.split("\n")
+
+            for i in lines:
+                lines_note = i.startswith("note ")
+                #if lines_note is True:
+                    #print(evt+i+"\n")
+
+                # On récupère les témoins:
+                #lines_wit = i.startswith("wit")
+                #if lines_wit is True:
+                    #print(i)
+
+            #lines_note = io.StringIO(evt)
+            #lines_note = lines_note.readlines()
+            #print(lines_note)
+
+            #for note in evt:
+
+                #print(note)
+
+            # print(line[1])
+            # il faudra modifier ind_evt en ajoutant le statut dans l'événement => via une deuxieme boucle
+        # , re.MULTILINE
+        # for m in matches:
+        # print(m)
 
 
-    print(list_evt_ind)
 
 
 if __name__ == '__main__':
