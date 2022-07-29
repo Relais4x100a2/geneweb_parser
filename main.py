@@ -2,7 +2,8 @@ import re
 import uuid
 import io
 
-# Pour nettoyer le code, regarder https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
+# Pour nettoyer le code, regarder
+# https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
 
 
 def individu_parse():
@@ -54,32 +55,23 @@ def individu_parse():
             # pour cela on récupère les lignes de chaque evt.
             lines = evt.split("\n")
 
+            liste=[]
             for i in lines:
                 lines_note = i.startswith("note ")
-                #if lines_note is True:
-                    #print(evt+i+"\n")
+                #lines_note_vide = i.startswith(" ",5,7)
+                if lines_note is True:
+                    x=i.replace("note ","")
+                    liste.append(x)
+            new_list = [x for x in liste if x != '']
+            print(new_list)
 
-                # On récupère les témoins:
+                # On récupère les témoins.
+                # Il faudra modifier ind_evt en ajoutant le statut dans l'événement, via une deuxieme boucle.
                 #lines_wit = i.startswith("wit")
                 #if lines_wit is True:
                     #print(i)
 
-            #lines_note = io.StringIO(evt)
-            #lines_note = lines_note.readlines()
-            #print(lines_note)
-
-            #for note in evt:
-
-                #print(note)
-
-            # print(line[1])
-            # il faudra modifier ind_evt en ajoutant le statut dans l'événement => via une deuxieme boucle
-        # , re.MULTILINE
-        # for m in matches:
-        # print(m)
-
-
-
 
 if __name__ == '__main__':
     individu_parse()
+
