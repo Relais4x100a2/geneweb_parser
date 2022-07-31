@@ -1,9 +1,5 @@
 import re
 import uuid
-import io
-
-# Pour nettoyer le code, regarder
-# https://github.com/MaximeChallon/AdresseParser/blob/master/AdresseParser/AdresseParser.py
 
 
 def individu_parse():
@@ -32,46 +28,55 @@ def individu_parse():
 
     for m in matches:
         # on crée la liste des individus, un individu étant défini dans un dictionnaire
+        dict_individu = {}
         line = m.split()
         id_g = line[0] + " " + line[1]
-        dict_individu = {
-            "id_geneweb": id_g,
-            "id_ind": uuid.uuid4().hex
-        }
+        dict_individu["id_geneweb"] = id_g
+        dict_individu["id_ind"] = uuid.uuid4().hex
         list_individu.append(dict_individu)
 
         # On crée la liste des événéments de chaque individu, chaque événément étant défini par un dictionnaire
         match_evt = re.findall(regex_evt, m, re.MULTILINE)
         for evt in match_evt:
+            dict_evt = {}
             line = evt.split()
-            dict_evt = {
-                "id_evt": uuid.uuid4().hex,
-                "type": line[0],
-                "date": line[1],
-                "ind_evt": [{"ind": dict_individu, "role": "objet"}]
-            }
+            dict_evt["id_evt"] = uuid.uuid4().hex
+            dict_evt["type"] = line[0]
+            if line[1]:
+                dict_evt["date"] = line[1]
+            else:
+                dict_evt["date"] = None
+            dict_evt["ind_evt"] = [{"ind": dict_individu, "role": "objet"}]
             list_evt_ind.append(dict_evt)
+
             # on récupère les infos (note/wit) relatives aux événements des individus
             # pour cela on récupère les lignes de chaque evt.
             lines = evt.split("\n")
+            liste = []
 
-            liste=[]
             for i in lines:
                 lines_note = i.startswith("note ")
-                #lines_note_vide = i.startswith(" ",5,7)
                 if lines_note is True:
-                    x=i.replace("note ","")
-                    liste.append(x)
-            new_list = [x for x in liste if x != '']
-            print(new_list)
+                    x = i.replace("note ", '')
+                    if x != '':
+                        liste.append(x)
+
+            if liste:
+                dict_note = {'related_to_evt_id': dict_evt["id_evt"], 'note': liste}
+                list_evt_ind_note.append(dict_note)
+
+                # On récupère les sources.
 
                 # On récupère les témoins.
                 # Il faudra modifier ind_evt en ajoutant le statut dans l'événement, via une deuxieme boucle.
-                #lines_wit = i.startswith("wit")
-                #if lines_wit is True:
-                    #print(i)
+                # lines_wit = i.startswith("wit")
+                # if lines_wit is True:
+                # print(i)
+
+    # print(list_individu)
+    # print(list_evt_ind)
+    print(list_evt_ind_note)
 
 
 if __name__ == '__main__':
     individu_parse()
-
