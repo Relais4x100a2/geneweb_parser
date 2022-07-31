@@ -12,7 +12,7 @@ def individu_parse():
         fichier = myfile.read()
 
     # Listes vides destinées à recevoir l'ensemle des informations parsées.
-    list_individu = []
+    list_ind = []
     list_evt_ind = []
     list_evt_ind_note = []
 
@@ -33,7 +33,7 @@ def individu_parse():
         id_g = line[0] + " " + line[1]
         dict_individu["id_geneweb"] = id_g
         dict_individu["id_ind"] = uuid.uuid4().hex
-        list_individu.append(dict_individu)
+        list_ind.append(dict_individu)
 
         # On crée la liste des événéments de chaque individu, chaque événément étant défini par un dictionnaire
         match_evt = re.findall(regex_evt, m, re.MULTILINE)
@@ -73,7 +73,7 @@ def individu_parse():
                 # if lines_wit is True:
                 # print(i)
 
-    # print(list_individu)
+    print(list_ind)
     # print(list_evt_ind)
     print(list_evt_ind_note)
 
