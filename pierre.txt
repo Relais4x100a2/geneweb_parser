@@ -47,7 +47,7 @@ beg
 end notes
 
 pevt ADRIEN Pierre_Emile_Jean-Baptiste
-#birt 15/11/1891 #p _[quai_du_Haut_Pont,_152_bis]_-_Saint-Omer,_62765,_Pas-de-Calais,_Nord-Pas-de-Calais,_France
+#birt 15/11/1891 #p _[quai_du_Haut_Pont,_152_bis]_-_Saint-Omer,_62765,_Pas-de-Calais,_Nord-Pas-de-Calais,_France #s HOP
 #Prix_du_Lycée_-_élève_externe 6/8/1904 #p Saint-Omer,_62765,_Pas-de-Calais,_Nord-Pas-de-Calais,_France
 note Autres citations :
 note * bibliotheque-numerique.bibliotheque-agglo-stomer.fr/idviewer/14085/3
